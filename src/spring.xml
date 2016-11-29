@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+      xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:context="http://www.springframework.org/schema/context"
+      xmlns:aop="http://www.springframework.org/schema/aop"
+      xmlns:tx="http://www.springframework.org/schema/tx"
+	  xmlns:mvc="http://www.springframework.org/schema/mvc"
+      xsi:schemaLocation="
+      
+	  http://www.springframework.org/schema/beans 
+	  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	  
+	  http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-3.0.xsd
+ 	  
+	  http://www.springframework.org/schema/aop 
+	  http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	  
+	  http://www.springframework.org/schema/tx
+      http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        
+      ">
+      
+      <!-- springmvc 与 mybits 整合spring配置文件 -->
+      <!-- 配置c3p0连接池对象 -->
+      <bean id="comboPooledDataSourceID" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+          <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+          <property name="jdbcUrl" value="jdbc:mysql:///bigcraft?"/>
+          <property name="user" value="root"/>
+          <property name="password" value="root"/>
+      </bean>
+      
+      <!-- 配置sqlsessionfactoryBean(取代mybatis工具类) -->
+      <bean id="sqlSessionFactoryBeanID" class="org.mybatis.spring.SqlSessionFactoryBean">
+          <property name="dataSource" ref="comboPooledDataSourceID"/>
+          <property name="configLocation" value="classpath:mybatis.xml"/>
+      </bean>
+      
+      <!-- 配置mybatis事务管理器（实际使用jdbc事务管理器） -->
+      <bean id="dataSourceTransactionManagerID" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+          <property name="dataSource" ref="comboPooledDataSourceID"></property>
+      </bean>
+      
+      <!-- 配置事务通知（那些方法需要事务）  * 表示所有的方法-->
+      <tx:advice id="tx" transaction-manager="dataSourceTransactionManagerID">
+          <tx:attributes>
+              <!-- 制定方法都通过事务管理，默认只处理运行时异常，加入rollback处理所有异常或包括异常 -->
+              <tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception"/>  
+              <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+              <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+              <tx:method name="*" propagation="SUPPORTS"/>
+          </tx:attributes>
+      </tx:advice>
+      
+      <!-- 配置事务切面（哪些包中的类需要事务通知）*.*(..) 第一个*表示类名，第二个*表示方法名，..表示参数不限 -->
+      <aop:config>
+          <aop:pointcut id="pointcut" expression="execution(* com.craft.Spring.Dao.*.*(..))"/>
+          <aop:advisor advice-ref="tx" pointcut-ref="pointcut"/>
+      </aop:config>
+      
+      
+      <bean id="userDao" class="com.craft.Spring.Dao.UserDao_mvc">
+          <property name="SqlSessionFactory" ref="sqlSessionFactoryBeanID"/>
+      </bean>
+      <!-- 不再使用xml配置改用注释的方式-->
+      <bean id="userServiceId" class="com.craft.Spring.Service.UserService">
+          <property name="userDao" ref="userDao"></property>
+      </bean> 
+      <context:component-scan base-package="com.craft.Spring.Action"></context:component-scan>
+      <context:annotation-config/>
+ </beans>
