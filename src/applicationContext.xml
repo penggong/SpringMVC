@@ -58,18 +58,29 @@
       
       <!-- 配置事务切面（哪些包中的类需要事务通知）*.*(..) 第一个*表示类名，第二个*表示方法名，..表示参数不限 -->
       <aop:config>
-          <aop:pointcut id="pointcut" expression="execution(* com.craft.Spring.Dao.*.*(..))"/>
+          <aop:pointcut id="pointcut" expression="execution(* com.craft.Spring.Service.*.*(..))"/>
           <aop:advisor advice-ref="tx" pointcut-ref="pointcut"/>
       </aop:config>
       
       
-      <bean id="userDao" class="com.craft.Spring.Dao.UserDao_mvc">
+      <!-- <bean id="userDao" class="com.craft.Spring.Dao.UserDao_mvc">
           <property name="SqlSessionFactory" ref="sqlSessionFactoryBeanID"/>
-      </bean>
+      </bean> -->
       <!-- 不再使用xml配置改用注释的方式-->
-      <bean id="userServiceId" class="com.craft.Spring.Service.UserService">
+      <!-- <bean id="userServiceId" class="com.craft.Spring.Service.UserService">
           <property name="userDao" ref="userDao"></property>
-      </bean> 
-      <context:component-scan base-package="com.craft.Spring.Action"></context:component-scan>
-      <context:annotation-config/>
+      </bean>  -->
+      
+      <!-- 自动扫描组件 -->
+      <context:component-scan base-package="com.craft">
+          <context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+          <!-- <context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Service" /> -->
+      </context:component-scan>
+      
+      <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      		<property name="prefix" value="/JSP/"/>
+      		<property name="suffix" value=".jsp"/>
+      </bean>
  </beans>
