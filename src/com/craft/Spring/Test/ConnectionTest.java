@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.craft.Spring.Dao.Impl.UserDao_mvc;
+import com.craft.Spring.Dao.UserDao_mvc;
 import com.craft.Spring.entity.User;
 
 

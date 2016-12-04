@@ -7,5 +7,5 @@ public interface UserService {
 	/*
 	 * 用户增加
 	 */
-	public void UserAdd(User user) throws Exception;
+	public void insertUser(User user) throws Exception;
 }

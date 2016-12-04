@@ -23,17 +23,9 @@ public class UserServiceImpl implements UserService{
 	}*/
 	/**
 	 *    添加用户
-	 */     public void UserAdd2(User user) throws Exception{
-    	userDao.insert(user);
-    	int i= 1/0;
-    	System.out.println(i);
-    	user.setU_id(6);
+	 */
+	     public void insertUser(User user) throws Exception{
     	userDao.insert(user);
     }
-	@Override
-	public void UserAdd(User user) throws Exception {
-		// TODO Auto-generated method stub
-		System.out.println("useradd------mark");
-	}
 }
 

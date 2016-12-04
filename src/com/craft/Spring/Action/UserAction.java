@@ -23,7 +23,7 @@ public class UserAction{
 	@RequestMapping(value="insert.action",method=RequestMethod.POST)
 	public String insert(Model model,User user) throws Exception {
 		System.out.println(user.getU_id());
-		userService.UserAdd(user);
+		userService.insertUser(user);
 		model.addAttribute("success", "Second成功");
 		model.addAttribute("user", user);
 		return "spring";
