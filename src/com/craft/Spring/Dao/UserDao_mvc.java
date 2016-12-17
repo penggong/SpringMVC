@@ -7,5 +7,5 @@ import com.craft.Spring.entity.User;
  */
 public interface UserDao_mvc {
 
-	public void insert(User user) throws Exception;
+	public void insertUser(User user) throws Exception;
 }

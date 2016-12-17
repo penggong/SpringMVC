@@ -15,7 +15,9 @@
         </dataSource>
      </environment> 
    </environments> -->
-   <mappers>
+   <!-- <mappers>
      <mapper resource="com/craft/Spring/entity/UserMapper.xml"/>
-   </mappers>
+   </mappers> 
+       通过在spring配置文件中session工厂配置路径，mapper文件使用同entity实体相同的命名空间
+   -->
 </configuration>

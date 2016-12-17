@@ -35,9 +35,11 @@
       </bean>
       
       <!-- 配置sqlsessionfactoryBean(取代mybatis工具类) -->
-      <bean id="sqlSessionFactoryBeanID" class="org.mybatis.spring.SqlSessionFactoryBean">
+      <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
           <property name="dataSource" ref="comboPooledDataSourceID"/>
           <property name="configLocation" value="classpath:mybatis.xml"/>
+          <!--通过mapper.xml 文件的命名空间同entity实体一致， 配置扫描式加载SQL映射文件，记得去掉mybatis-config配置 -->
+          <property name="mapperLocations" value="classpath:com/craft/Spring/Dao/*.xml"></property>
       </bean>
       
       <!-- 配置mybatis事务管理器（实际使用jdbc事务管理器） -->
@@ -79,8 +81,22 @@
 			expression="org.springframework.stereotype.Service" />  -->
       </context:component-scan>
       
+      <!-- 配置SessionTemplate,封装dao层的mybits操作 -->
+      <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+               <constructor-arg name="sqlSessionFactory"  ref="sqlSessionFactory"></constructor-arg>
+      </bean>
+      <!-- 配置转换器,对于在basepackage配置的路径，如果包（子包）下的接口类，
+         如果接口类的全名在mapper.xml文件和定义过的命名空间一致，将被转换为spring的bean
+         在调用的地方通过配置@Autowired方式将可以注入接口实例-->
+      <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+            <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+            <property name="basePackage" value="com.craft.Spring.Dao"/>
+      </bean>
+      
       <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
       		<property name="prefix" value="/JSP/"/>
       		<property name="suffix" value=".jsp"/>
       </bean>
+      
+      
  </beans>

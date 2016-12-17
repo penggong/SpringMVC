@@ -12,7 +12,7 @@ import org.apache.ibatis.session.SqlSession;
 import com.craft.Spring.entity.User;
 import com.craft.Spring.util.MyBatisUtil;
 
-public class UserDao {
+public class UserDao_mybatis {
 
 	/**
 	 * add user
@@ -108,7 +108,7 @@ public class UserDao {
 		
 	}*/
 	public static void main(String [] args) throws Exception{
-		UserDao dao = new UserDao();
+		UserDao_mybatis dao = new UserDao_mybatis();
 		System.out.println("1.page");
 		for(User user : dao.findALLByNameWithFy("peng", 0, 2)){
 			System.out.println(user.getU_name());
